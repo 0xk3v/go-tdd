@@ -1,9 +1,9 @@
 package array
 
-func sum(numArr []int) int {
+func sum(numbers []int) int {
 	sum := 0
 
-	for _, num := range numArr {
+	for _, num := range numbers {
 		sum += num
 	}
 

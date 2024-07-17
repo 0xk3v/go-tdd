@@ -17,8 +17,13 @@ func TestSum(t *testing.T) {
 
 		got := sum(numbers)
 		want := 30
-		if got != want {
-			t.Errorf("Got %d, want %d, given %v", got, want, numbers)
-		}
+		assertCorrectMessage(t, got, want)
 	})
+}
+
+func assertCorrectMessage(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %q, wanted %q ", got, want)
+	}
 }
