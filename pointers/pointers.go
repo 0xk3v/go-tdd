@@ -1,5 +1,7 @@
 package pointers
 
+import "errors"
+
 type Wallet struct {
 	balance int
 }
@@ -12,6 +14,11 @@ func (w *Wallet) Balance() int {
 	return w.balance
 }
 
-func (w *Wallet) Withdraw(amount int) {
+func (w *Wallet) Withdraw(amount int) error {
+	if amount > w.balance {
+		return errors.New("invalid amount")
+	}
+
 	w.balance -= amount
+	return nil
 }
