@@ -22,13 +22,26 @@ func TestWallet(t *testing.T) {
 		wallet := Wallet{}
 		wallet.Deposit(200)
 
-		wallet.Withdraw(50)
+		err := wallet.Withdraw(50)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		got := wallet.Balance()
 		want := 150
 
 		if got != want {
 			t.Errorf("Got %d, want %d", got, want)
+		}
+	})
+
+	t.Run("Testing Withdraw without enough money", func(t *testing.T) {
+		wallet := Wallet{}
+		wallet.Deposit(100)
+
+		err := wallet.Withdraw(100)
+		if err != nil {
+			t.Fatal(err)
 		}
 	})
 }
