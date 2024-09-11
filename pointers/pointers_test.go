@@ -14,17 +14,18 @@ func TestWallet(t *testing.T) {
 
 	t.Run("Testing Withdraw", func(t *testing.T) {
 		wallet := Wallet{balance: Bitcoin(200)}
-		wallet.Withdraw(Bitcoin(50))
+		err := wallet.Withdraw(Bitcoin(50))
+
+		assertNoError(t, err)
 		assertBalance(t, wallet, Bitcoin(150))
 	})
 
 	t.Run("Testing Withdraw with insufficient funds", func(t *testing.T) {
-		startingBalance := Bitcoin(50)
-		wallet := Wallet{startingBalance}
+		wallet := Wallet{Bitcoin(50)}
 		err := wallet.Withdraw(Bitcoin(100))
 
-		assetError(t, err, "cannot withdraw, insufficient funds")
-		assertBalance(t, wallet, startingBalance)
+		assetError(t, err, ErrInsufficientFunds)
+		assertBalance(t, wallet, Bitcoin(50))
 	})
 }
 
@@ -37,14 +38,22 @@ func assertBalance(t testing.TB, wallet Wallet, want Bitcoin) {
 	}
 }
 
-func assetError(t testing.TB, got error, want string) {
+func assertNoError(t testing.TB, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Fatal("Got an error but didn't expect one")
+	}
+}
+
+func assetError(t testing.TB, got, want error) {
 	t.Helper()
 
 	if got == nil {
 		fmt.Print("Was expecting an error")
 	}
 
-	if got.Error() != want {
+	if got != want {
 		t.Errorf("Got %q, wanted %q", got, want)
 	}
 }
